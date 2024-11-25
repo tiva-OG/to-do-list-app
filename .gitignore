@@ -1,0 +1,6 @@
+.env
+*.log
+ignore-dir/
+node_modules/
+package.json
+package-lock.json

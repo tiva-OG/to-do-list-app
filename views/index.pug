@@ -1,0 +1,200 @@
+html(lang="en")
+  head
+    title To-Do App
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons")
+    link(rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700" type="text/css")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
+    link(rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css")
+    link(rel="stylesheet" href="/style.css")
+
+  body
+    - const menuItems = [{name: "Today", count:`${tasks.length}`, className: "fa-solid fa-calendar-day"}, {name: "Week", count: "0", className: "fa-solid fa-calendar-week"}, {name: "Month", count: "5", className: "fa-solid fa-calendar-days"}, {name: "Upcoming", count: "0", className: "fa-solid fa-location-arrow"}, {name: "Completed", count: "5", className: "fa-solid fa-check-double"},]
+    - const tagItems = [{name: "default", count: `${tasks.length}`, color: "yellow"}, {name: "GRE", count: "2", color: "teal"}, {name: "CV", count: "0"}]
+    - const tagColor = (tag) => tag.color == null || undefined ? "#00ffc4b3" : `${tag.color}`
+    - const tagCount = (tag) =>Number(tag.count) === 0 ? "" : `${tag.count}`
+
+    template#dropdown-menu
+      ul.dropdown-opt-container()
+        each tag in tagItems
+          - const color = tagColor(tag)
+          li.dropdown-opt(option-id=`${tag.name}`)
+            .dropdown-opt-icon
+              i.fas.fa-hashtag(style=`font-size: 10px; color: ${color}`)
+            .dropdown-opt-name
+              #option-name #{tag.name}
+              .separator
+
+
+    template#task-form-template
+      li.task-form-wrapper
+        form.task-form
+          .task-form-main
+            .task-input-fields
+              .data-field#title-data
+                input.task-data#title-input(type="text" placeholder="Task title")
+              .data-field#desc-data
+                textarea.task-data#desc-input(placeholder="Description")
+          .task-form-footer
+            .form-tags-dropdown
+              button.dropdown-btn(type="button") 
+                span
+                  .dropdown-content
+                    .hashtag
+                      i.fas.fa-hashtag(style=`font-size: 10px;`)
+                    span.selected-option(style=`color: #202020;`) default
+                    .caret-down
+                      i.fas.fa-caret-down(style=`font-size: 12px; color: #202020;`)
+
+            .form-actions-btn
+              button.cancel-btn(type="button")
+                span Cancel
+              button.add-edit-btn(type="button")
+                span
+
+    template#task-wrapper-template
+      .task-wrapper
+        li.task-item(role="presentation")
+          .task-root(role="button" tabindex="0")
+            .task-content
+              label
+                input#task-checkbox(type="checkbox")
+                span.checkbox-icon
+                .task-body
+                  .task-title
+                    .title
+            .task-tag
+              span default
+            .task-actions
+              button#edit-task(type="button" aria-label="Edit")
+                span.icon-edit
+                  i.fa.fa-edit
+              button#delete-task(type="button" aria-label="Delete")
+                span.icon-trash
+                  i.fa.fa-trash-o
+
+    .page-container
+      section#sidebar
+        nav.sidebar-nav
+          .app-heading
+            img.app-img(src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/756881/laptop.svg")
+            h1.app-title To-Do App
+
+          .sidebar-container
+            .sidebar-menu
+              ul.menu-list
+                each item in menuItems
+                  - const count = Number(item.count) === 0 ? "" : `${item.count}`
+                  li.menu-list-item(tabindex="0")
+                    .menu-item-details
+                      a(href="javascript:void(0)")
+                        span.menu-item-icon
+                          i(class=`${item.className}`, style="font-size: 14px;")
+                        .menu-item-name-wrapper
+                          span.menu-item-name #{item.name}
+                      span.menu-item-count-container
+                        .menu-item-count-wrapper
+                          span.menu-item-count #{count}
+              .tags-container
+                .tags-header-wrapper(data-expansion-panel-header="true")
+                  .tags-header
+                    a.heading
+                      .tags-header-name Tags
+                .tags-list
+                  ul.tags-list
+                    .tags-body-wrapper
+                      each tag in tagItems
+                        - const color = tagColor(tag)
+                        - const count = tagCount(tag)
+                          .tag-body(role="button" tabindex="-1")
+                            li.tag-list-item(tabindex="0") 
+                              .tag-item-details
+                                a(href="javascript:void(0)")
+                                  span.tag-item-icon
+                                    i.fas.fa-hashtag(style=`font-size: 14px; color: ${color}`)
+                                  .tag-item-name-wrapper
+                                    span.tag-item-name #{tag.name}
+                                span.tag-item-count-container
+                                  .tag-item-count-wrapper
+                                    span.tag-item-count #{count}
+              div
+
+      section#main-content
+        main.main-content(tabindex="-1")
+          header
+            .header-container
+              .menu-choice-name
+                h1 Today
+                //- this needs to be dynamic; count doesn't change after adding or deleting task
+                - const identifier = tasks.length <= 1 ? "task" : "tasks"
+              .tasks-count #{tasks.length} #{identifier}
+          .tasks-view
+            .tasks-list#tasks-list
+              ul.tasks-list-container
+                .tasks-only
+                  - const getTaskRef = (title, taskId) => {return title.toLowerCase().split(" ").join("-") + "-" + taskId.slice(-8)}
+                  each task in tasks
+                    .task-wrapper(id=`${task.id}` task-ref=`${getTaskRef(task.title, task.id)}`, )
+                      li.task-item(role="presentation" task-id=`${task.id}`)
+                        .task-root(role="button")
+                          .task-content
+                            label
+                              input#task-checkbox(type="checkbox")
+                              span.checkbox-icon
+                              .task-body
+                                .task-title
+                                  .title #{task.title}
+                                if task.description
+                                  .task-desc
+                                    .description #{task.description}
+                          .task-tag
+                            span default
+                          .task-actions
+                            button#edit-task(type="button" aria-label="Edit" task-id=`${task.id}`)
+                              span.icon-edit
+                                i.fa.fa-edit
+                            button#delete-task(type="button" aria-label="Delete" task-id=`${task.id}`)
+                              span.icon-trash
+                                i.fa.fa-trash-o
+                li.add-task
+                  button#large-add-btn(type="button")
+                    span.icon-add
+                      //- i.material-icons add
+                      i.fas.fa-plus
+                    | Add task
+
+
+      section#calendar
+        .calendar-container
+          h1 Calendar Section
+          h2 COMING SOON
+
+    script(type="text/javascript" src="/script.js")
+    script(type="text/javascript" src="/task-actions.js")
+    script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js")
+    script(src="https://kit.fontawesome.com/a6cbc2c941.js" crossorigin="anonymous")
+
+
+
+
+
+      //- li.task-form-wrapper
+      //-   form.task-form
+      //-     .task-form-main
+      //-       .task-input-fields
+      //-         .data-field#title-data
+      //-           input.task-data#title-input(type="text" placeholder="Task title")
+      //-         .data-field#desc-data
+      //-           textarea.task-data#desc-input(placeholder="Description")
+      //-     .task-form-footer
+      //-       .form-tags-dropdown
+      //-         button(type="button") 
+      //-           span
+      //-             .dropdown
+      //-               span default
+      //-       .form-actions-btn
+      //-         button#cancel-btn(type="button")
+      //-           span Cancel
+      //-         button#add-btn(type="button")
+      //-           span Add task

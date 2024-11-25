@@ -1,0 +1,52 @@
+[
+	{
+		"title": "Buy groceries",
+		"description": "Get milk, eggs, and bread from the store",
+		"completed": false
+	},
+	{
+		"title": "Finish project report",
+		"description": "Complete the report on the energy conversion project",
+		"completed": true
+	},
+	{
+		"title": "Call mom",
+		"description": "",
+		"completed": false
+	},
+	{
+		"title": "Exercise",
+		"description": "Go for a 30-minute run",
+		"completed": true
+	},
+	{
+		"title": "Clean the house",
+		"description": "Vacuum the living room and clean the kitchen",
+		"completed": false
+	},
+	{
+		"title": "Read a book",
+		"description": "Finish reading 'Atomic Habits'",
+		"completed": true
+	},
+	{
+		"title": "Attend team meeting",
+		"description": "Join the 10 AM virtual meeting with the DevOps team",
+		"completed": false
+	},
+	{
+		"title": "Study for exams",
+		"description": "Revise backend development and cloud computing topics",
+		"completed": true
+	},
+	{
+		"title": "Water the plants",
+		"description": "",
+		"completed": false
+	},
+	{
+		"title": "Schedule a dentist appointment",
+		"description": "Call the clinic to set up an appointment",
+		"completed": false
+	}
+]
